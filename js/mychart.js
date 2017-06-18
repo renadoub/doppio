@@ -28,14 +28,12 @@ d3.csv("/data/chartDoppio.csv", type, function(error, data) {
     };
   });
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(indices, function(d) { return d.date; }));
+  y.domain(d3.extent(indices, function(d) {
+    console.log(d);
+    return d.values.performance; }));
 
-  y.domain([
-    d3.min(funds, function(c) { return d3.min(c.values, function(d) { return d.performance; }); }),
-    d3.max(funds, function(c) { return d3.max(c.values, function(d) { return d.performance; }); })
-  ]);
-
-  z.domain(funds.map(function(c) { return c.id; }));
+  z.domain(indices.map(function(c) { return c.id; }));
 
   g.append("g")
       .attr("class", "axis axis--x")
@@ -53,7 +51,7 @@ d3.csv("/data/chartDoppio.csv", type, function(error, data) {
       .text("performance, %");
 
   var fund = g.selectAll(".fund")
-    .data(funds)
+    .data(indices)
     .enter().append("g")
       .attr("class", "fund");
 
